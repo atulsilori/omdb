@@ -13,20 +13,33 @@ const  getData = async (url) => {
             let plot=document.getElementById("plot");
             let image=document.getElementById("image");
             let actors=document.getElementById("actors")
-
+            let length=document.getElementById("length")
+            let genre=document.getElementById("genre")
 
             let date=data.Released.split(" ")[2]
 
-            let score=parseInt(data.imdbRating[0], 10)
-            score=Math.ceil(score/10*5)
+            let scoreArr=data.imdbRating.split('.')
+            let score=parseInt(scoreArr[0], 10)
+            console.log(scoreArr)
+            score=Math.floor(score/10*5)
             console.log(score)
-            let star='<span class="glyphicon glyphicon-star">*</span>'
+            let star='<i class="fa fa-star"></i>'
+            let halfstar='<i class="fa fa-star-half-o"></i>'
             let rate=''
             for(let i=0; i<score; i++){
                 rate+=star
             }
-
+            if(scoreArr[1]!='0'){
+                rate+=halfstar
+            }
             console.log(rate)
+
+            let genreArr=data.Genre.split(', ')
+            let Genre=``
+            for(let i=0; i<genreArr.length; i++){
+                Genre+=`<span class="badge rounded-pill bg-secondary">${genreArr[i]}</span> `
+            }
+
             let actorNameLink=''
             let actorarr=data.Actors.split(', ')
             for(let name of actorarr){
@@ -35,7 +48,9 @@ const  getData = async (url) => {
             actorNameLink=actorNameLink.substr(0, actorNameLink.length-2)
             title.innerHTML=data.Title+`(${date})`
             rating.innerHTML=rate
-            plot.innerHTML='<h5>Plot:</h5> '+data.Plot
+            plot.innerHTML=data.Plot
             image.src=data.Poster
-            actors.innerHTML='Cast: '+actorNameLink
+            actors.innerHTML=actorNameLink
+            length.innerHTML=`<i class="fa fa-clock-o"></i> ${data.Runtime}`
+            genre.innerHTML=Genre
         })

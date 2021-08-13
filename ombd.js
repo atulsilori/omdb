@@ -14,10 +14,10 @@ Year: "2015"
 */
     var dropdown=document.getElementById('floatingSelect')
     let date=new Date()
-    let max=2021
+    let max=date.getFullYear()
     let min=1800
     var html=`<option value="select">select year</option>`
-    for(let i=min; i<=max; i++){
+    for(let i=max; i>=min; i--){
         html +=`<option value="${i}">${i}</option>`
     }
     dropdown.innerHTML=html
@@ -41,7 +41,7 @@ Year: "2015"
                     else{
                         image=content.Poster
                     }
-                    console.log(content)
+                    //console.log(content)
                     cardData+=`
                     <div class="card element" id="carddata" style="width: 14rem;">
                         <img src='${image}' class="card-img-top" alt="..." id='${content.Title}'>
