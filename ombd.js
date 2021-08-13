@@ -1,13 +1,21 @@
 // http://www.omdbapi.com/?i=tt3896198&apikey=72af88a9
 window.addEventListener('DOMContentLoaded',()=>{
-    const  getData = async (url) => {
+
+    const geAlldata = async (url)=>{
         const response = await fetch(url)
         return response.json()
-    };
-    
+    }
+
+/*
+Poster: "https://m.media-amazon.com/images/M/MV5BMTQxOTA2NDUzOV5BMl5BanBnXkFtZTgwNzY2MTMxMzE@._V1_SX300.jpg"
+Title: "Fast & Furious 7"
+Type: "movie"
+Year: "2015"
+*/
     var dropdown=document.getElementById('floatingSelect')
+    let date=new Date()
     let max=2021
-    let min=1850
+    let min=1800
     var html=`<option value="select">select year</option>`
     for(let i=min; i<=max; i++){
         html +=`<option value="${i}">${i}</option>`
@@ -19,32 +27,37 @@ window.addEventListener('DOMContentLoaded',()=>{
         let text=document.getElementById("title")
         let years=document.getElementById("floatingSelect")
         let year=years.options[years.selectedIndex].value
-        if(year=='select')
-            year=''
-        let data=text.value;
-        const api=`http://www.omdbapi.com/?apikey=72af88a9&t=${data}&y=${year}`;
-        console.log(api)
-        getData(api).then((data)=>{
+        text=text.value.split(' ')
+        text=text.join('')
+        geAlldata(`http://www.omdbapi.com/?i=tt3896198&apikey=72af88a9&s='${text}'&y=${year}`).then((data)=>{
+            let divisionCard=document.getElementById("FLEX")
             console.log(data)
-            let title=document.getElementById("title_");
-            let rating=document.getElementById("rating");
-            let plot=document.getElementById("plot");
-            let image=document.getElementById("image");
-            let date=data.Released.split(" ")[2]
-            let score=parseInt(data.imdbRating[0], 10)
-            score=Math.ceil(rating/10*5)
-            let star='<i class="icon-star"></i>'
-            let rate=''
-            for(let i=0; i<score; i++){
-                rate+=star
-            }
+            var cardData=``
+                for(let content of data.Search){
+                    let image=''
+                    if(content.Poster=='N/A'){
+                        image='./deafult.jpg'
+                    }
+                    else{
+                        image=content.Poster
+                    }
+                    console.log(content)
+                    cardData+=`
+                    <div class="card element" id="carddata" style="width: 14rem;">
+                        <img src='${image}' class="card-img-top" alt="..." id='${content.Title}'>
+                    </div>
+                    `  
+                }
+            divisionCard.innerHTML=cardData
+        }).catch((data)=>{
 
-            title.innerHTML=data.Title+`(${date})`
-            rating.innerHTML=rate
-            plot.innerHTML=data.Plot
-            image.src=data.Poster
         })
     })
+
+    var cardClick=document.getElementById('FLEX')
+    cardClick.addEventListener('click', (e)=>{
+        console.log(e.target.id)
+        sessionStorage.setItem("id", e.target.id)
+        window.open('./index.html', '_self')
+    })
 })
-
-
