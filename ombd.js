@@ -41,7 +41,8 @@ window.addEventListener('DOMContentLoaded',()=>{
                 for(let content of data.Search){
                     let image=''
                     if(content.Poster=='N/A'){
-                        image='./deafult.jpg'
+                        //image='./deafult.jpg'
+                        continue;
                     }
                     else{
                         image=content.Poster
