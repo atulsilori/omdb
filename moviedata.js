@@ -16,7 +16,7 @@ const  getData = async (url) => {
             let length=document.getElementById("length")
             let genre=document.getElementById("genre")
             let country=document.getElementById("country")
-
+            console.log(data.Released)
             let date=data.Released.split(" ")[2]
 
             let scoreArr=data.imdbRating.split('.')
@@ -56,7 +56,8 @@ const  getData = async (url) => {
             title.innerHTML=data.Title+(date!=undefined?`(${date})`:'')
             rating.innerHTML=rate
             plot.innerHTML=data.Plot
-            image.src=data.Poster
+            console.log('image: '+data.Poster)
+            image.src=data.Poster.trim()!='N/A'?data.Poster:''
             actors.innerHTML=actorNameLink
             length.innerHTML=`<i class="fa fa-clock-o"></i> ${data.Runtime}`
             genre.innerHTML=Genre
