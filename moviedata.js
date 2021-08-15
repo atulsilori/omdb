@@ -3,8 +3,8 @@ const  getData = async (url) => {
     return response.json()
 };
 
-        let title=sessionStorage.getItem("id")
-        const api=`http://www.omdbapi.com/?apikey=72af88a9&t=${title}`;
+        let imdbID=sessionStorage.getItem("id")
+        const api=`http://www.omdbapi.com/?apikey=72af88a9&i=${imdbID}`;
         console.log(api)
         getData(api).then((data)=>{
             console.log(data)
@@ -15,6 +15,7 @@ const  getData = async (url) => {
             let actors=document.getElementById("actors")
             let length=document.getElementById("length")
             let genre=document.getElementById("genre")
+            let country=document.getElementById("country")
 
             let date=data.Released.split(" ")[2]
 
@@ -40,17 +41,24 @@ const  getData = async (url) => {
                 Genre+=`<span class="badge rounded-pill bg-secondary">${genreArr[i]}</span> `
             }
 
+            let countryArr=data.Country.split(', ')
+            let Country=``
+            for(let i=0; i<countryArr.length; i++){
+                Country+=`<span class="badge rounded-pill bg-primary">${countryArr[i]}</span> `
+            }           
+
             let actorNameLink=''
             let actorarr=data.Actors.split(', ')
             for(let name of actorarr){
                 actorNameLink+=`<a href='https://en.wikipedia.org/wiki/${name}' target='_blank'>${name}</a>, `
             }
             actorNameLink=actorNameLink.substr(0, actorNameLink.length-2)
-            title.innerHTML=data.Title+`(${date})`
+            title.innerHTML=data.Title+(date!=undefined?`(${date})`:'')
             rating.innerHTML=rate
             plot.innerHTML=data.Plot
             image.src=data.Poster
             actors.innerHTML=actorNameLink
             length.innerHTML=`<i class="fa fa-clock-o"></i> ${data.Runtime}`
             genre.innerHTML=Genre
+            country.innerHTML=Country
         })
